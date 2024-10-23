@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Excavator;
+use App\Events\ExcavatorUpdated;
 
 class ExcavatorController extends Controller
 {
@@ -29,12 +30,16 @@ class ExcavatorController extends Controller
         $request->validate([
             'name' => 'required|string|min:3|max:255',
             'model' => 'required|string|min:3|max:255',
+            'latitude' => 'required|string|min:3|max:255',
+            'longitude' => 'required|string|min:3|max:255',
         ]);
  
         // Excavator::create($request->all());
         Excavator::create([
            'name' => $request->name,
            'model' => $request->model,
+           'latitude' => $request->latitude,
+           'longitude' => $request->longitude,
         ]);
 
         return redirect()
@@ -62,6 +67,7 @@ class ExcavatorController extends Controller
         ]);
  
         $excavator->update($request->all());
+        event(new ExcavatorUpdated("Excavator {$excavator->id} moved"));
 
         return redirect()
         ->route('excavators.index')

@@ -11,5 +11,7 @@ class Excavator extends Model
         'model',
         'status',
         'location',
+        'latitude',
+        'longitude',
     ];
 }
